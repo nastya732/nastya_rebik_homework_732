@@ -1,5 +1,6 @@
 import os
 
+
 def s():
     a = (input())
     if a == "":
