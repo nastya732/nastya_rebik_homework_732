@@ -1,0 +1,36 @@
+В целом ок, но
+
+╰─❯ python3 test.py
+1
+2
+3
+4
+5
+7
+6
+Traceback (most recent call last):
+  File "/Users/ch1nn1y/Trash/test.py", line 15, in <module>
+    s()
+    ^^^
+  File "/Users/ch1nn1y/Trash/test.py", line 9, in s
+    s()
+  File "/Users/ch1nn1y/Trash/test.py", line 9, in s
+    s()
+  File "/Users/ch1nn1y/Trash/test.py", line 9, in s
+    s()
+  [Previous line repeated 4 more times]
+  File "/Users/ch1nn1y/Trash/test.py", line 4, in s
+    a = (input())
+         ^^^^^^^
+EOFError
+6
+7
+5
+4
+3
+2
+1
+
+как видишь ошибка, поэтому просто надо сделать 
+try:
+  line = input()
