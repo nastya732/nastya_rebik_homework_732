@@ -1,0 +1,57 @@
+import os
+
+def start(read, write, set_1):
+
+    while True:
+        data = os.read(read, 100)
+        data = data.decode('utf-8')
+        if data[0] == "l" and data[1] == "o" and data[2] == "a" and data[3] == "d":
+            set_1.add(data[4:])
+        elif data[:4] == "chec":
+            if (data[4:] in set_1):
+                os.write(write, b"Yes")
+            else:
+                os.write(write, b"No")
+        else:
+            os.write(write, b"ok")
+            return
+
+def master():
+    list_1 = []
+   
+    pipes_read_list = []
+    pipes_write_list = []
+
+   
+   
+    for i in range(52):
+        read, write = os.pipe()
+        pipes_write_list.append(write)
+        pipes_read_list.append(read)
+   
+   
+   
+    for i in range(26):
+        cur_pid = os.fork()
+        if (cur_pid == 0):
+            start(pipes_read_list[2*i], pipes_write_list[2*i+1], set())
+            return 0
+   
+
+    while True:
+        query = input()
+        query = query.split()
+        if (query[0] == "load"):
+            os.write(pipes_write_list[2*(ord(query[1][0])-97)], bytes("load"+query[1], 'utf-8'))
+        elif (query[0] == "check"):
+            os.write(pipes_write_list[2*(ord(query[1][0])-97)], bytes("chec"+query[1], 'utf-8'))
+            data = os.read(pipes_read_list[2*(ord(query[1][0])-97)+1], 3)
+            print(data.decode('utf-8'))
+        else:
+            for i in range(26):
+                os.write(pipes_write_list[2*i], b"kill")
+                data = os.read(pipes_read_list[2*i+1], 2)
+            return
+
+
+master()
